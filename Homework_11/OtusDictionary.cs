@@ -11,43 +11,50 @@ namespace Homework_11
     internal class OtusDictionary
     {
         string[] array = new string[32];
+        int[] keyIndex = new int[32];
+
         public void Add(int key, string value)
         {
-            int keyContainer = key;
-
             if (value != null)
             {
-                key = Math.Abs(key % array.Length);
-                if (array[key] == null)
+                int keyValue = Math.Abs(key % array.Length);
+                if (array[keyValue] == null)
                 {
-                    array[key] = value;
+                    array[keyValue] = value;
+                    keyIndex[keyValue] = key;
                 }
                 else
                 {
                     string[] arrayContainer = array;
                     Array.Resize(ref array, arrayContainer.Length * 2);
+
+                    int[] keyIndexContainer = keyIndex;
+                    Array.Resize(ref keyIndex, keyIndexContainer.Length * 2);
+
                     for (int i = 0; i < arrayContainer.Length; i++)
                     {
-                        key = Math.Abs(i % array.Length);
-                        
+                        key = Math.Abs(i % array.Length); 
                         array[key] = array[i];
+                        keyIndex[key] = keyIndex[i];
                     }
-                    keyContainer = Math.Abs(keyContainer % array.Length);
-                    array[keyContainer] = value;
+                    keyIndexContainer[key] = Math.Abs(keyIndexContainer[key] % array.Length);
+                    //keyContainer = Math.Abs(keyContainer % array.Length);
+                    array[keyIndexContainer[key]] = value;
                 }
             }
             else
             {
-                throw new Exception("Ошибка!");
+                throw new ArgumentNullException("Значение не может быть null!");
             }
         }
 
         public string Get(int key)
         {
-            if (array[key] != null)
-                return array[key];
+            int keyValue = Math.Abs(key % array.Length);
+            if (array[keyValue] != null)
+                return array[keyValue];
             else
-                throw new Exception();
+                throw new KeyNotFoundException("Ключ не найден!");
         }
 
     }
