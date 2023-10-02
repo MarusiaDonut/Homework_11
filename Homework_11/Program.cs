@@ -12,6 +12,8 @@ otusDictionary.Add(1, "Элемент " + 1);
 otusDictionary.Add(10, "Элемент " + 10);
 otusDictionary.Add(100, "Элемент " + 100);
 
+otusDictionary.Add(1, "Элемент " + 1);
+
 Console.WriteLine(otusDictionary.Get(1));
 Console.WriteLine(otusDictionary.Get(10));
 Console.WriteLine(otusDictionary.Get(100));

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Homework_11
 {
-
     internal class OtusDictionary
     {
         string[] array = new string[32];
@@ -15,47 +10,46 @@ namespace Homework_11
 
         public void Add(int key, string value)
         {
-            if (value != null)
+            if (value is null)
+                throw new ArgumentNullException("Значение не может быть null!");
+
+            int arrayIndexKey = Array.IndexOf(keyIndex, key);
+            if (arrayIndexKey == key)
             {
-                int keyValue = Math.Abs(key % array.Length);
-                if (array[keyValue] == null)
-                {
-                    array[keyValue] = value;
-                    keyIndex[keyValue] = key;
-                }
-                else
-                {
-                    string[] arrayContainer = array;
-                    Array.Resize(ref array, arrayContainer.Length * 2);
+                throw new Exception("Значение передаваемого ключа повторяется!");
+            }
 
-                    int[] keyIndexContainer = keyIndex;
-                    Array.Resize(ref keyIndex, keyIndexContainer.Length * 2);
-
-                    for (int i = 0; i < arrayContainer.Length; i++)
-                    {
-                        key = Math.Abs(i % array.Length); 
-                        array[key] = array[i];
-                        keyIndex[key] = keyIndex[i];
-                    }
-                    keyIndexContainer[key] = Math.Abs(keyIndexContainer[key] % array.Length);
-                    //keyContainer = Math.Abs(keyContainer % array.Length);
-                    array[keyIndexContainer[key]] = value;
-                }
+            int keyValue = Math.Abs(key % array.Length);
+            if (array[keyValue] == null)
+            {
+                array[keyValue] = value;
+                keyIndex[keyValue] = key;
             }
             else
             {
-                throw new ArgumentNullException("Значение не может быть null!");
+                string[] arrayContainer = array;
+                Array.Resize(ref array, arrayContainer.Length * 2);
+
+                int[] keyIndexContainer = keyIndex;
+                Array.Resize(ref keyIndex, keyIndexContainer.Length * 2);
+
+                for (int i = 0; i < arrayContainer.Length; i++)
+                {
+                    key = Math.Abs(i % array.Length);
+                    array[key] = array[i];
+                    keyIndex[key] = keyIndex[i];
+                }
+                keyIndexContainer[key] = Math.Abs(keyIndexContainer[key] % array.Length);
+                array[keyIndexContainer[key]] = value;
             }
         }
 
         public string Get(int key)
         {
-            int keyValue = Math.Abs(key % array.Length);
-            if (array[keyValue] != null)
-                return array[keyValue];
-            else
-                throw new KeyNotFoundException("Ключ не найден!");
+            int arrayIndex = Array.IndexOf(keyIndex, key);
+            if (array[arrayIndex] != null)
+                return array[arrayIndex];
+            throw new KeyNotFoundException("Ключ не найден!");
         }
-
     }
 }
